@@ -1,44 +1,38 @@
-# Heart Health Exploratory Data Analysis
+# Beyond Triage: Evaluating Clinical History for Capacity-Constrained Emergency Care Prioritisation
 
-**Status: Work in progress**
+## Research question
 
-## Overview
+Does adding prior healthcare-utilisation information to current-visit features improve the ranking of emergency-department visits by likelihood of hospital admission, particularly when only a limited proportion of visits can be prioritised for further assessment?
 
-This project explores the UCI Heart Disease dataset using Python and Pandas. The goal is to learn and apply data inspection, data-quality checks, descriptive statistics, and exploratory visualization to a public healthcare dataset.
+## Motivation
 
-## Tools
+Emergency departments operate under capacity constraints, making it important to understand how available clinical information relates to hospital admission. This project examines whether historical healthcare-utilisation variables add useful predictive information beyond features recorded during the current visit.
 
-- Python
-- Pandas and NumPy
-- Matplotlib and Seaborn
-- Google Colab
+The analysis evaluates predictive performance and admission capture at different prioritisation capacities. The objective is to assess the incremental value of historical information, not to develop a clinical triage tool.
 
-## Current Progress
+## Approach
 
-- [x] Loaded the dataset
-- [x] Inspected column names, data types, and summary statistics
-- [ ] Complete data-quality checks
-- [ ] Explore distributions and compare outcome groups
-- [ ] Document findings and limitations
-- [ ] Validate the notebook from beginning to end
+- Prepare and inspect emergency-department visit data.
+- Compare a current-visit feature model with a model that also includes historical healthcare-utilisation features.
+- Evaluate discrimination using ROC-AUC and average precision.
+- Assess probability predictions using Brier score and log loss.
+- Compare the proportion of admissions captured when prioritising the highest-ranked 10%, 20% and 30% of visits.
+- Estimate uncertainty in differences between models using paired bootstrap analysis.
 
-## Dataset
+## Preliminary findings
 
-The project uses the Heart Disease dataset from the UCI Machine Learning Repository.
+On the current held-out test set, the model incorporating historical information achieved a ROC-AUC of 0.8754, compared with 0.8685 for the current-visit model. At 20% and 30% prioritisation capacity, the historical-information model captured approximately 0.97 and 1.30 percentage points more admissions, respectively. The estimated difference at 10% capacity was smaller, and its confidence interval included zero.
 
-Source: https://archive.ics.uci.edu/dataset/45/heart+disease
+These are preliminary results. Their interpretation depends on verifying dataset provenance, predictor availability at the intended prediction time, and the independence assumptions underlying validation and uncertainty estimates.
 
-The notebook uses the UCI dataset through the `ucimlrepo` Python package. The original outcome contains multiple diagnosis levels; the analysis will document any transformation used for exploratory comparisons.
+## Limitations and ongoing work
 
-## Important Limitations
+- Verify the original dataset source, definitions and documentation.
+- Assess potential predictor leakage and whether all features would be available at the intended prediction time.
+- Investigate whether repeated patients are present and whether validation should account for patient-level grouping.
+- Consolidate duplicated analyses and improve reproducibility.
+- Re-run the complete notebook from a fresh runtime before reporting final results.
 
-This is an educational project using historical data. Findings are exploratory and must not be interpreted as medical advice, a diagnostic tool, or evidence of causation.
+## Scope and intended use
 
-## Reproducibility
-
-The analysis notebook is provided in this repository. The code and results are still being developed and have not yet been fully validated.
-
-## Author
-
-Athashree Gaikwad  
-Bioengineering | Data Analytics | Computational Biology
+This is a retrospective predictive-modelling study using existing data. Hospital admission is the outcome being predicted; it is not a direct measure of clinical urgency, patient benefit or the quality of triage decisions. The results should not be interpreted as evidence that the model is ready for clinical deployment.
